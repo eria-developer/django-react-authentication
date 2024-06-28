@@ -3,6 +3,7 @@ from rest_framework.generics import GenericAPIView
 from .serializers import UserRegistrationSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from .utils import send_code_to_user
 
 
 class RegisterUserView(GenericAPIView):
@@ -14,6 +15,7 @@ class RegisterUserView(GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             user=serializer.data()
+            send_code_to_user(user["email"])
             # send email function user["email"]
             return Response({
                 "data": user,
