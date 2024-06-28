@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .managers import UserManager
 
 
-class user(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True, verbose_name=_("Email Address"))
     first_name = models.CharField(max_length=254, verbose_name=_("First Name"))
     last_name = models.CharField(max_length=254, verbose_name=_("Last Name"))
