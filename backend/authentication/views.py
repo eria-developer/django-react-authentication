@@ -4,6 +4,7 @@ from .serializers import UserRegistrationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from .utils import send_code_to_user
+from .models import OneTimePassword
 
 
 class RegisterUserView(GenericAPIView):
@@ -22,3 +23,24 @@ class RegisterUserView(GenericAPIView):
                 "message": f"hi {user['first_name']}, thanks for signing up"
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class verifyUserEmail(GenericAPIView):
+    def post(self, request):
+        otpcode = request.data.get("otp")
+        try:
+            user_code_object = OneTimePassword.objects.get(code=otpcode)
+            user = user_code_object.user
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+                return Response({
+                    "message": "User email verified successfully"
+                }, status=status.HTTP_200_OK)
+            return Response({
+                "message": "Otp code is invalid, user already verified"
+            }, status=status.HTTP_204_NO_CONTENT)
+        except OneTimePassword.DoesNotExist:
+            return Response({
+                "message": "passcode not provided"
+            }, status=status.HTTP_404_NOT_FOUND)
