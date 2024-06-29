@@ -1,5 +1,6 @@
 import environ
 from pathlib import Path
+from datetime import timedelta
 
 env = environ.Env (
 )
@@ -129,3 +130,18 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = '2525'
 FROM_DEFAULT_EMAIL = "info@eriajackson.com"
 EMAIL_USE_TLS = True
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"]
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=2000),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
