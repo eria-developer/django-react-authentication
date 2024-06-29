@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "authentication",
     "social_authentication",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
 ]
 
