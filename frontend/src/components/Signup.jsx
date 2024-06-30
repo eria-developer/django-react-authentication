@@ -36,7 +36,8 @@ const Signup = () => {
           <div className="githubContainer">
             <button>Sign up with Github</button>
           </div>
-          <div className="googleContainer">
+          <div className="githubContainer">
+            <button>Sign up with Google</button>
             <div id="signInDiv" className="gsignIn"></div>
           </div>
         </div>
