@@ -15,7 +15,6 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleSigninWithGoogle = async (response) => {
-    // console.log(response);
     const payload = response.credential;
     const server_res = await axios.post(
       "http://localhost:8000/api/v1/auth/google/",
@@ -43,19 +42,32 @@ const Signup = () => {
     }
   };
 
+  const loadGoogleScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.onload = resolve;
+      document.body.appendChild(script);
+    });
+  };
+
   useEffect(() => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_CLIENT_ID,
-      callback: handleSigninWithGoogle,
-    });
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-      text: "continue_with",
-      shape: "circle",
-      width: "280",
-    });
+    const initializeGoogleSignIn = async () => {
+      await loadGoogleScript();
+      /* global google */
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        callback: handleSigninWithGoogle,
+      });
+      google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "circle",
+        width: "280",
+      });
+    };
+    initializeGoogleSignIn();
   }, []);
 
   const { email, first_name, last_name, password, password2 } = formData;

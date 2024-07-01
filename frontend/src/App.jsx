@@ -9,6 +9,7 @@ import {
   VerifyEmail,
 } from "./components";
 import "./App.css";
+import ResetPasword from "./components/ResetPasword";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
         <Route path="/dashboard" element={<Profile />} />
         <Route path="/otp/verify" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route
+          path="/api/v1/auth/password-reset-confirm/:uid/:token"
+          element={<ResetPasword />}
+        />
       </Routes>
     </Router>
   );

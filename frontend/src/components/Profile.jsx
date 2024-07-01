@@ -39,20 +39,34 @@ const Profile = () => {
   // };
 
   const handleLogout = async () => {
-    try {
-      const response = await AxiosInstance.post("/auth/logout/", {
-        refresh: refresh,
-      });
-      if (response.status === 200) {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("user");
-        navigate("/login");
-        toast.success("You have been successfully logged out!");
+    const refreshToken = localStorage.getItem("refresh_token");
+
+    if (refreshToken) {
+      try {
+        const response = await AxiosInstance.post("/auth/logout/", {
+          refresh: JSON.parse(refreshToken),
+        });
+
+        if (response.status === 200) {
+          localStorage.removeItem("access");
+          localStorage.removeItem("refresh");
+          localStorage.removeItem("user");
+          navigate("/login");
+          toast.success("You have been successfully logged out!");
+        }
+      } catch (error) {
+        console.error(
+          "Logout error: ",
+          error.response ? error.response.data : error.message
+        );
+        toast.error("There was an error logging out. Please try again.");
       }
-    } catch (error) {
-      console.error("Logout error: ", error);
-      toast.error("There was an error logging out. Please try again.");
+    } else {
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("user");
+      navigate("/login");
+      toast.success("You have been successfully logged out!");
     }
   };
 

@@ -80,7 +80,7 @@ const Login = () => {
 
             <input type="submit" value="Login" className="submitButton" />
             <p className="pass-link">
-              <Link to={"/forget-password"}>forgot password</Link>
+              <Link to={"/forgot-password"}>forgot password</Link>
             </p>
           </form>
           <h3 className="text-option">Or</h3>
