@@ -152,5 +152,3 @@ class LogoutSerializer(serializers.Serializer):
         except TokenError:
             return self.fail("Bad_token")
 
-        return super().save(**kwargs)
-

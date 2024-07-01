@@ -14,6 +14,50 @@ const Signup = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const handleSigninWithGoogle = async (response) => {
+    // console.log(response);
+    const payload = response.credential;
+    const server_res = await axios.post(
+      "http://localhost:8000/api/v1/auth/google/",
+      { access_token: payload }
+    );
+    console.log(server_res.data);
+
+    const user = {
+      email: server_res.data.email,
+      name: server_res.data.full_name,
+    };
+
+    if (server_res.status === 200) {
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem(
+        "access",
+        JSON.stringify(server_res.data.access_token)
+      );
+      localStorage.setItem(
+        "refresh",
+        JSON.stringify(server_res.data.refresh_token)
+      );
+      navigate("/dashboard");
+      toast.success(`You are welcome ${server_res.data.full_name}`);
+    }
+  };
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      callback: handleSigninWithGoogle,
+    });
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+      text: "continue_with",
+      shape: "circle",
+      width: "280",
+    });
+  }, []);
+
   const { email, first_name, last_name, password, password2 } = formData;
 
   const handleOnChange = (e) => {
@@ -111,7 +155,6 @@ const Signup = () => {
             <button>Sign up with Github</button>
           </div>
           <div className="githubContainer">
-            <button>Sign up with Google</button>
             <div id="signInDiv" className="gsignIn"></div>
           </div>
         </div>
